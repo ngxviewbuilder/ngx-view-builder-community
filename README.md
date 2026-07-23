@@ -90,7 +90,9 @@ export class BuilderPageComponent {
 
 ## License
 
-NGX View Builder is closed source, distributed under a commercial license, not MIT/Apache/GPL. During the public beta (through version 1.0.0) the builder and runtime are free to use, including in production, with no license key required. Commercial licensing starts at 1.0.0; see [pricing](https://ngxviewbuilder.io/pricing) and [licensing terms](https://ngxviewbuilder.io/developers/licensing) for details as they're published.
+NGX View Builder is closed source, distributed under a commercial license, not MIT/Apache/GPL.
+
+**The runtime, the part that renders views in your app, is free, always, with no license key and no watermark, whether you're on 1.0.0 or a pre-1.0 beta build.** Only the visual builder itself becomes a paid, licensed product starting at version 1.0.0. Right now, during the public beta, the builder is also free to use, including in production. See [pricing](https://ngxviewbuilder.io/pricing) and [licensing terms](https://ngxviewbuilder.io/developers/licensing) for details as they're published.
 
 ## Community
 
