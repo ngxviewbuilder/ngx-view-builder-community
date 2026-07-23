@@ -1,4 +1,4 @@
-# NGX View Builder — Community
+# NGX View Builder - Community
 
 This repository is the community home for **[NGX View Builder](https://ngxviewbuilder.io)**, a visual builder for Angular applications. If you landed here from a search engine or a link and aren't sure what the project actually is, this page is for you. If you're already a user, this is also where bug reports, feature requests, and general discussion happen.
 
