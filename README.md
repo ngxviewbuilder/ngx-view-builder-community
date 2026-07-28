@@ -25,8 +25,8 @@ npm install ngx-view-builder
 
 Requirements:
 
-- Angular 21+ (`@angular/core`, `@angular/common`, `@angular/cdk` as peer dependencies)
-- Node.js 20+
+- Angular 22+ (`@angular/core`, `@angular/common`, `@angular/cdk` as peer dependencies)
+- Node.js 22.22+ (or 24.15+ / 26+)
 
 The optional Templates plugin (the only officially supported plugin at the moment) installs separately and is version-locked to the core package:
 
@@ -41,11 +41,11 @@ Full setup, including app config and runtime initialization, is in the [installa
 This is genuinely all it takes to render a saved view for end users:
 
 ```ts
-import { Component } from '@angular/core';
-import { NgxViewBuilderRuntime } from 'ngx-view-builder';
+import { Component } from "@angular/core";
+import { NgxViewBuilderRuntime } from "ngx-view-builder";
 
 @Component({
-  selector: 'app-client-form',
+  selector: "app-client-form",
   imports: [NgxViewBuilderRuntime],
   template: `<ngx-view-builder-runtime [pageJson]="structure" />`,
 })
@@ -61,13 +61,20 @@ Read data back out with `runtime.getDataSnapshot()`, the `(valueChanged)` output
 Letting someone edit a view visually is just as small:
 
 ```ts
-import { Component } from '@angular/core';
-import { BuilderModel, IStructure, NgxViewBuilderBuilder } from 'ngx-view-builder';
+import { Component } from "@angular/core";
+import {
+  BuilderModel,
+  IStructure,
+  NgxViewBuilderBuilder,
+} from "ngx-view-builder";
 
 @Component({
-  selector: 'app-builder-page',
+  selector: "app-builder-page",
   imports: [NgxViewBuilderBuilder],
-  template: `<ngx-view-builder-builder [model]="builderModel" (structureChanged)="onChange($event)" />`,
+  template: `<ngx-view-builder-builder
+    [model]="builderModel"
+    (structureChanged)="onChange($event)"
+  />`,
 })
 export class BuilderPageComponent {
   builderModel = new BuilderModel();
