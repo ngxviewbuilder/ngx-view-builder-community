@@ -19,59 +19,67 @@ It's built specifically for Angular, not a generic embeddable widget, so it inte
 
 ## Quick start
 
+NGX View Builder ships as scoped packages on npm. The old unscoped `ngx-view-builder` and `ngx-view-builder-plugin-templates` packages stopped at 0.6.0 and are not updated any more.
+
+| Package | You need it when | License |
+| --- | --- | --- |
+| `@ngxviewbuilder/runtime` | Your app renders saved views | Free, no key |
+| `@ngxviewbuilder/designer` | Your app also hosts the visual builder | Commercial |
+| `@ngxviewbuilder/plugin-templates` | You want reusable HTML templates in the builder (optional) | Commercial |
+
+Rendering views only:
+
 ```bash
-npm install ngx-view-builder
+npm install @ngxviewbuilder/runtime
+```
+
+Hosting the builder as well:
+
+```bash
+npm install @ngxviewbuilder/runtime @ngxviewbuilder/designer
 ```
 
 Requirements:
 
-- Angular 22+ (`@angular/core`, `@angular/common`, `@angular/cdk` as peer dependencies)
+- Angular 22+ (`@angular/core`, `@angular/common`, `@angular/cdk` as peer dependencies; the designer also needs `@angular/forms`)
 - Node.js 22.22+ (or 24.15+ / 26+)
 
-The optional Templates plugin (the only officially supported plugin at the moment) installs separately and is version-locked to the core package:
+Import the global stylesheet once, for example in `styles.css`:
 
-```bash
-npm install ngx-view-builder-plugin-templates
+```css
+@import '@ngxviewbuilder/runtime/styles/index.css';
 ```
 
 Full setup, including app config and runtime initialization, is in the [installation guide](https://ngxviewbuilder.io/developers/installation).
 
 ### Rendering a view (runtime)
 
-This is genuinely all it takes to render a saved view for end users:
-
 ```ts
-import { Component } from "@angular/core";
-import { NgxViewBuilderRuntime } from "ngx-view-builder";
+import { Component, signal } from '@angular/core';
+import { IStructure, NgxViewBuilderRuntime } from '@ngxviewbuilder/runtime';
 
 @Component({
-  selector: "app-client-form",
+  selector: 'app-client-form',
   imports: [NgxViewBuilderRuntime],
-  template: `<ngx-view-builder-runtime [pageJson]="structure" />`,
+  template: `<ngx-view-builder-runtime [pageJson]="structure()" />`,
 })
 export class ClientFormComponent {
-  structure = /* JSON produced by the builder, loaded from your backend */ {};
+  structure = signal<IStructure>(/* JSON produced by the builder, loaded from your backend */);
 }
 ```
 
-Read data back out with `runtime.getDataSnapshot()`, the `(valueChanged)` output, or by injecting `NgxViewBuilderApiService` and subscribing to `onComplete`. Details in [rendering views](https://ngxviewbuilder.io/developers/runtime-integration).
+Read data back out with `runtime.getDataSnapshot()`, the `(valueChanged)` output, or by injecting `NgxViewBuilderApiService`. Details in [rendering views](https://ngxviewbuilder.io/developers/runtime-integration).
 
 ### Embedding the builder
 
-Letting someone edit a view visually is just as small:
-
 ```ts
-import { Component } from "@angular/core";
-import {
-  BuilderModel,
-  IStructure,
-  NgxViewBuilderBuilder,
-} from "ngx-view-builder";
+import { Component } from '@angular/core';
+import { BuilderModel, IStructure, NgxViewBuilderDesigner } from '@ngxviewbuilder/designer';
 
 @Component({
-  selector: "app-builder-page",
-  imports: [NgxViewBuilderBuilder],
-  template: `<ngx-view-builder-builder
+  selector: 'app-builder-page',
+  imports: [NgxViewBuilderDesigner],
+  template: `<ngx-view-builder-designer
     [model]="builderModel"
     (structureChanged)="onChange($event)"
   />`,
@@ -90,16 +98,20 @@ export class BuilderPageComponent {
 ## Key capabilities
 
 - 55+ built-in elements: inputs, tables, charts, KPIs, layout, and more
-- An expression system for calculated fields, validation, and conditional visibility, including across nested tables and repeaters
-- REST and route-based data sources
-- An AI assistant built into the builder itself to help compose and extend views
+- An expression system for calculated fields, validation, and conditional visibility, including across nested tables and repeaters, with a visual rule builder for non-programmers
+- REST, WebSocket and route-based data sources
+- A stable `data-testid` on every control, for Playwright and Cypress ([E2E testing](https://ngxviewbuilder.io/developers/e2e-testing))
 - Angular-native output: standalone components and signals, rendered directly in your app
+
+## AI access (MCP)
+
+The builder has **no AI chat and no AI model inside it**. AI works from the outside: your own AI client (Claude, ChatGPT, Cursor, Codex or your own agent) connects to the builder over [MCP](https://modelcontextprotocol.io) and drives it while you watch the canvas. The builder exposes a command API that reads the view and applies changes, and you see each element arrive on the canvas as the agent builds. AI access comes with a designer license. See [AI access](https://ngxviewbuilder.io/developers/ai-command-api).
 
 ## License
 
 NGX View Builder is closed source, distributed under a commercial license, not MIT/Apache/GPL.
 
-**The runtime, the part that renders views in your app, is free, always, with no license key and no watermark, whether you're on 1.0.0 or a pre-1.0 beta build.** Only the visual builder itself becomes a paid, licensed product starting at version 1.0.0. Right now, during the public beta, the builder is also free to use, including in production. See [pricing](https://ngxviewbuilder.io/pricing) and [licensing terms](https://ngxviewbuilder.io/developers/licensing) for details as they're published.
+**The runtime, the part that renders views in your app, is free, always, with no license key and no watermark, whether you're on 1.0.0 or a pre-1.0 beta build.** Only the visual builder itself becomes a paid, licensed product starting at version 1.0.0. Right now, during the public beta, the builder is also free to use, including in production. See [pricing](https://ngxviewbuilder.io/#pricing) and [licensing terms](https://ngxviewbuilder.io/developers/licensing) for details as they're published.
 
 ## Community
 
@@ -125,8 +137,9 @@ Be respectful. Constructive feedback and a friendly tone are what make a communi
 
 - Website: [ngxviewbuilder.io](https://ngxviewbuilder.io)
 - Installation guide: [ngxviewbuilder.io/developers/installation](https://ngxviewbuilder.io/developers/installation)
-- Pricing & licensing: [ngxviewbuilder.io/pricing](https://ngxviewbuilder.io/pricing)
-- npm package: [ngx-view-builder](https://www.npmjs.com/package/ngx-view-builder)
+- Pricing & licensing: [ngxviewbuilder.io/#pricing](https://ngxviewbuilder.io/#pricing)
+- npm packages: [@ngxviewbuilder/runtime](https://www.npmjs.com/package/@ngxviewbuilder/runtime), [@ngxviewbuilder/designer](https://www.npmjs.com/package/@ngxviewbuilder/designer), [@ngxviewbuilder/plugin-templates](https://www.npmjs.com/package/@ngxviewbuilder/plugin-templates)
+- Contact: [info@heydelabs.com](mailto:info@heydelabs.com) (Heyde Labs, MB)
 - Issues: use this repository's **Issues** tab
 - Discussions: use this repository's **Discussions** tab
 
