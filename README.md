@@ -142,5 +142,5 @@ Be respectful. Constructive feedback and a friendly tone are what make a communi
 - Contact: [info@heydelabs.com](mailto:info@heydelabs.com) (Heyde Labs, MB)
 - Issues: use this repository's **Issues** tab
 - Discussions: use this repository's **Discussions** tab
-
+- Linkedin: [ngx-view-builder](https://www.linkedin.com/company/ngx-view-builder/) 
 Thanks for being part of the NGX View Builder community.
